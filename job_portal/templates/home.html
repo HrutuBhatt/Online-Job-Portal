@@ -1,0 +1,156 @@
+{% extends 'base1.html' %}
+
+{% block content %}
+<!-- <h1>This is home page</h1> -->
+<style>
+    body {
+        /* background-color: black; */
+        background-image: url("https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-position: center top 0px;
+        /* background-color: rgba(255, 255, 255, 0.438); */
+    }
+
+    .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .content {
+            position: relative; /* Adjust content position to appear above overlay */
+            color: white;
+            text-align: center;
+            z-index: 1; /* Ensure content appears above the overlay */
+    }
+
+    h1 ,h2,h5{
+        color: rgb(255, 255, 255);
+        font-weight: 1000;
+        text-align: center;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .hero-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    /* Typing animation */
+    @keyframes typing {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 100%;
+        }
+    }
+
+    #typing-text {
+        overflow: hidden;
+        border-right: 3px solid black;
+        white-space: nowrap;
+        margin: 0 auto;
+        animation: typing 3s steps(20, end), blink-caret 0.5s step-end infinite alternate;
+    }
+
+    @keyframes blink-caret {
+
+        from,
+        to {
+            border-color: transparent;
+        }
+
+        50% {
+            border-color: black;
+        }
+    }
+</style>
+<br><br><br>
+
+<body>
+    <!-- <img src="job_portal\image\js_home.jpg"> -->
+    
+
+    <div class="container-fluid mx-10">
+        <!-- <img src="https://media.istockphoto.com/photos/wood-office-desk-table-with-laptop-computer-cup-of-coffee-and-top-picture-id1173059742?k=20&m=1173059742&s=170667a&w=0&h=LqqmJ3ycaRs4jKF7xe-85FTyL-3YBQE62BPvT38iSaQ=" alt="image" style="width:100%;"> -->
+        <div class="overlay"></div>
+        <div class="content">
+            <div class="mx-20 my-5 gx-10 ">
+
+
+            </div>
+            <div class="hero-text">
+                <h1 id="typing-text"></h1>
+            </div>
+            <br><br><br><br><br><br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h2>{{ job_seekers_count }}+</h2>
+                    <h5>USERS</h5>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h2>{{ companies_count }}+</h2>
+                    <h5>COMPANIES</h5>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h2>40+</h2>
+                    <h5>JOBS</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    const phrases = ["Find your dream job", "Explore exciting career opportunities", "Discover your next career move"];
+    let index = 0;
+    let text = '';
+    let isDeleting = false;
+    let typingSpeed = 100; // Adjust typing speed as needed
+
+    function type() {
+        const currentPhrase = phrases[index];
+        if (isDeleting) {
+            text = currentPhrase.substring(0, text.length - 1);
+        } else {
+            text = currentPhrase.substring(0, text.length + 1);
+        }
+
+        document.getElementById('typing-text').textContent = text;
+
+        let delta = typingSpeed;
+
+        if (isDeleting) {
+            delta /= 2; // Adjust deleting speed
+        }
+
+        if (!isDeleting && text === currentPhrase) {
+            delta = 1000; // Time to pause before deleting
+            isDeleting = true;
+        } else if (isDeleting && text === '') {
+            isDeleting = false;
+            index++;
+            if (index >= phrases.length) {
+                index = 0;
+            }
+            delta = 500; // Time before typing next phrase
+        }
+
+        setTimeout(type, delta);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        type();
+    });
+</script>
+{% endblock %}
