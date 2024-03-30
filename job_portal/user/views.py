@@ -56,7 +56,7 @@ def profile(request):
 def updateprofile(request):
     user_profile = Profile.objects.get(user=request.user)  # Assuming user is authenticated
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=user_profile)
+        form = ProfileForm(request.POST, request.FILES,instance=user_profile)
         if form.is_valid():
             form.save()
             return redirect('profile')
@@ -97,7 +97,7 @@ def companyregister(request):
 def companyprofile(request):
     
     if request.method=='POST':
-        form=CompanyProfileForm(request.POST)
+        form=CompanyProfileForm(request.POST,request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)  # Create the Profile instance but don't save it to the database yet
             profile.user = request.user
@@ -110,7 +110,7 @@ def companyprofile(request):
 def updatecompanyprofile(request):
     user_profile = CompanyProfile.objects.get(user=request.user)  # Assuming user is authenticated
     if request.method == 'POST':
-        form = CompanyProfileForm(request.POST, instance=user_profile)
+        form = CompanyProfileForm(request.POST,request.FILES, instance=user_profile)
         if form.is_valid():
             form.save()
             return redirect('companyprofile')

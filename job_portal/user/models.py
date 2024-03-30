@@ -56,6 +56,7 @@ class Profile(models.Model):
     resume =  models.FileField(upload_to ='uploads/')
     gender = models.CharField(max_length=1, choices=GEN)
     location = models.CharField(max_length=50,null=True)
+    pic = models.ImageField(upload_to='uploads/', null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -70,6 +71,7 @@ class CompanyProfile(models.Model):
     contact = models.IntegerField()
     location = models.CharField(max_length=50)
     verified = models.BooleanField(default=False)
+    pic = models.ImageField(upload_to='uploads/', null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -133,3 +135,4 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.content
+    

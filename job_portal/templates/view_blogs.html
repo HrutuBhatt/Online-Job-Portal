@@ -23,7 +23,13 @@
     {% for blog in blogs %}
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="card-title">{{ blog.author }}</h5>
+            {% if author_profile.profile_pic %}
+            <img src="{{ blog.author.profile.pic.url }}" class="img-thumbnail rounded-circle" alt="Profile Picture" height="30" width="30">
+            {% else %}
+                <img src="https://tse2.mm.bing.net/th?id=OIP.xJRWipeay3vJG-lIA2M0ewAAAA&pid=Api&P=0&h=180"  class="img-thumbnail rounded-circle" height="30" width="30"
+                     alt="Default Profile Picture">
+            {% endif %}
+            <span class="card-title"><b>{{ blog.author }}</b></span>
         </div>
         <div class="card-body">
             <p class="card-text">{{ blog.content }}</p>

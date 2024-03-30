@@ -34,12 +34,12 @@ class CompanyRegisterForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model=Profile
-        fields=['name','education','bio','contact','age','resume','gender','location','header']
+        fields=['name','education','bio','contact','age','resume','gender','location','header','pic']
 
 class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model= CompanyProfile
-        fields=['name','description','contact','location']
+        fields=['name','description','contact','location','pic']
 
 class JobsForm(forms.ModelForm):
     class Meta:
