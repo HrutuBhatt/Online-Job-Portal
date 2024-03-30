@@ -13,5 +13,5 @@
 <li>Company authentication</li>
 <li>Profile</li>
 <li>Posting Jobs</li>
-<li>Recruite employers</li>
+<li>Recruite employees</li>
 <li>Contact applicants for further procedures</li>
