@@ -121,6 +121,9 @@ def updatecompanyprofile(request):
 def createjob(request):
     if not request.user.is_authenticated or not request.user.is_company:
         return redirect(reverse('companylogin'))
+    if not hasattr(request.user, 'companyprofile'):
+        return redirect('companyprofile')
+
     if request.method=='POST':
         form=JobsForm(request.POST)
         if form.is_valid():
@@ -140,9 +143,9 @@ def createjob(request):
 from django.contrib.auth.views import LoginView
 from .forms import CompanyLoginForm
 
-class CompanyLoginView(LoginView):
-    template_name = 'company_login.html'
-    authentication_form = CompanyLoginForm
+# class CompanyLoginView(LoginView):
+#     template_name = 'company_login.html'
+#     authentication_form = CompanyLoginForm
 
 from django.contrib.auth import authenticate, login as auth_login
 from .forms import CompanyLoginForm
@@ -182,11 +185,21 @@ def searchjob(request):
             if title:
                 jobs = jobs.filter(title__icontains=title)
             if jobtype:
-                jobs = jobs.filter(jobtype__icontains=jobtype)
+                if jobtype=="freelance":
+                    jobs = jobs.filter(jobtype__icontains="FL")
+                elif jobtype=="part-time":
+                    jobs = jobs.filter(jobtype__icontains="PT")
+                elif jobtype=="full-time":
+                    jobs = jobs.filter(jobtype__icontains="FT")
+                elif jobtype=="remote":
+                    jobs = jobs.filter(jobtype__icontains="RM")
+                elif jobtype=="internship":
+                    jobs = jobs.filter(jobtype__icontains="IN")
+                
             if location:
                 jobs = jobs.filter(location__icontains=location)
-            if req_skills:
-                jobs = jobs.filter(req_skills__name=req_skills)
+            # if req_skills:
+            #     jobs = jobs.filter(req_skills__name=req_skills)
                 # jobs = Jobs.objects.filter(req_skills=skill)
                 
             
@@ -268,7 +281,7 @@ def post(request):
             blog_post = form.save(commit=False)
             blog_post.author = request.user
             blog_post.save()
-            messages.success(request,f'Posted successfully!')
+            messages.success(request,'Posted successfully!')
             return redirect('home')
     else:
         form = BlogPostForm()
@@ -290,6 +303,7 @@ def delete_blog(request, blog_id):
     blog.delete()
     return redirect('my_blogs')
 
+#search blogs or companies...
 def search_profile(request):
     if request.method == 'POST':
         search_query = request.POST.get('search_query')
@@ -297,16 +311,29 @@ def search_profile(request):
         
         profiles = CompanyProfile.objects.filter(name__icontains=search_query)
         # company = get_object_or_404(CustomUser, username=search_query)
-        companies = CustomUser.objects.filter(username__icontains=search_query)
-        if companies.exists():
-            company=companies.first()
+        if profiles:
+            companies = CustomUser.objects.filter(username__icontains=search_query)
+            if companies.exists():
+                company=companies.first()
+            else:
+                messages.info(request,f'No such company found')
+                return redirect('search_profile')
+            jobs = Jobs.objects.filter(user=company) 
+            return render(request, 'search_result.html', {'profiles': profiles, 'search_query': search_query , 'jobs': jobs})
         else:
-            messages.success(request,f'No such company found')
-            return redirect('search_profile')
-        jobs = Jobs.objects.filter(user=company) 
-        return render(request, 'search_result.html', {'profiles': profiles, 'search_query': search_query , 'jobs': jobs})
-        # else:
-            # return render(request, 'no_results.html')
+            blogs= BlogPost.objects.filter(content__icontains=search_query)
+            if blogs:
+                context = {
+                    'blogs': blogs
+                }
+                return render(request, 'view_blogs.html',context)
+            else:
+                blogs = BlogPost.objects.all()
+                context = {
+                    'blogs': blogs
+                }
+                messages.success(request,'No blogs found')
+                return render(request,'view_blogs.html',context)
     else:
         return render(request, 'view_blogs.html')
     

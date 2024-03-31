@@ -2,6 +2,7 @@
 {% block content %}
 <br><br>
 <div class="container">
+  <h5>{{ job.title }}</h5><br>  
 {% if applications %}
 
     <table class="table table-dark table-striped">
@@ -55,26 +56,7 @@
     {% else %} 
         <p>No applications found for this job.</p>
     {% endif %}
-    <iframe id="resume-frame" style="display: none;"></iframe>
+    <!-- <iframe id="resume-frame" style="display: none;"></iframe> -->
 </div>
 
 {% endblock %}
-
-<!-- <script>
-    // Function to display resume content in iframe
-    function displayResume(resumeUrl) {
-        var iframe = document.getElementById('resume-frame');
-        iframe.src = resumeUrl;
-        iframe.style.display = 'block';
-    }
-
-    // Event listener for resume view links
-    var resumeLinks = document.querySelectorAll('.resume-view');
-    resumeLinks.forEach(function(link) {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            var resumeUrl = this.getAttribute('data-resume-url');
-            displayResume(resumeUrl);
-        });
-    });
-</script> -->
